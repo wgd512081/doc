@@ -1,4 +1,4 @@
-# mq下载安装教程 
+# rabbitMq下载安装教程 
   https://blog.csdn.net/acmman/article/details/79371312
 # 常用指令
  rabbitmq-plugins enable rabbitmq_management 开启插件
@@ -9,6 +9,6 @@
  rabbitmqctl status 查看服务状态
  rabbitmq-server restart 重启服务
  
- # mq使用教程
+ # rabbitMq使用教程
  https://blog.csdn.net/acmman/article/details/79438196
  
