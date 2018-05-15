@@ -1,0 +1,23 @@
+maven的详细操作
+=====
+###maven简介
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maven是一个项目管理和综合工具。Maven提供了开发人员构建一个完整的生命周期框架。开发团队可以自动完成项目的基础工具建设，Maven使用标准的目录结构和默认构建生命周期。 
+
+-------------------
+
+
+
+### Maven下载和在idea中的配置 
+####1.下载地址：http://maven.apache.org/download.cgi
+
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/mavenDownload.png)
+####2.解压并新建一个本地仓库文件夹。如
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/uncompress.png)
+####3.配置本地仓库路径
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/configurateLoalRepository.png)
+####4.配置链接到公共私有库
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/mavenConnectNexus.png)
+####5.配置maven环境变量
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/configurateVar.png)
+###6.在IntelliJ IDEA中配置maven
+![enter image description here](https://github.com/wgd512081/doc/raw/master/picture/ideaConfigurateMaven.png)
