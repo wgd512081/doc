@@ -1,0 +1,40 @@
+动态 sql 是 mybatis 的主要特性之一，在 mapper 中定义的参数传到 xml 中之后，在查询之前 mybatis 会对其进行动态解析。mybatis 为我们提供了两种支持动态 sql 的语法：#{} 以及 ${}。
+
+在下面的语句中，如果 username 的值为 zhangsan，则两种方式无任何区别：
+
+　　
+
+select * from user where name = #{name};
+select * from user where name = ${name};
+　　其解析之后的结果均为
+
+select * from user where name = 'zhangsan';
+　　但是 #{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替，变成如下的 sql 语句：
+
+select * from user where name = ?;
+　　而 ${} 则只是简单的字符串替换，在动态解析阶段，该 sql 语句会被解析成
+
+select * from user where name = 'zhangsan';
+　　以上，#{} 的参数替换是发生在 DBMS 中，而 ${} 则发生在动态解析过程中。
+
+　　那么，在使用过程中我们应该使用哪种方式呢？
+
+　　答案是，优先使用 #{}。因为 ${} 会导致 sql 注入的问题。看下面的例子：
+
+　　
+
+select * from ${tableName} where name = #{name}
+　　在这个例子中，如果表名为
+
+　　 user; delete user; --
+
+　　则动态解析之后 sql 如下：
+
+select * from user; delete user; -- where name = ?;
+
+
+现在特此整理这两种用法的不同点：
+
+    (1)首先一点就是，#{}传递参数时，会在传递的参数上加上引号，在传递属性比如   name=？ 时，可以很方便的使用#{}。而${}则不会添加引号，传递的是什么就会直接放到SQL中去执行。
+
+    (2)通过上面的日志信息我们可以看到，#{}传递的参数实际上是通过占位符去传入到已经预编译好的SQL中去的，所以此时的SQL已经完成编译，只需要传参数就完成执行了。而${}在日志中显示的是直接将参数拼接成完整的SQL去DBMS中编译执行的。所以#{}方式实际上比${}方式更加安全，不会引起SQL注入。但是在传入表名参数时，只能使用${},这时候，必须要在接受参数的时候加入逻辑判断，判断参数中是否存在SQL语句，以防引起注入。
