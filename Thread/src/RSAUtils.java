@@ -6,10 +6,13 @@ import java.io.ObjectOutputStream;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+
 import java.util.Scanner;
 
 import javax.crypto.Cipher;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 /**
@@ -30,6 +33,30 @@ class RSAUtils {
             PRIVATE_KEY_FILE = path + (path.endsWith("//")?"PrivateKey":"/PrivateKey");
         }
     }
+
+    //创建公私钥对
+    private static KeyPair getKeyPair() throws NoSuchAlgorithmException {
+        //使用RSA算法获得密钥对生成器对象keyPairGenerator
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        //设置密钥长度为1024
+        keyPairGenerator.initialize(1024);
+        //生成密钥对
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        return keyPair;
+    }
+
+    private static String getPublicKey() throws NoSuchAlgorithmException {
+        KeyPair keyPair = getKeyPair();
+        Key publicKey = keyPair.getPublic();
+        return  new String(Base64.encode(publicKey.getEncoded()));
+    }
+
+    private static String getPrivateKey() throws NoSuchAlgorithmException {
+        KeyPair keyPair = getKeyPair();
+        Key publicKey = keyPair.getPrivate();
+        return  new String(Base64.encode(publicKey.getEncoded()));
+    }
+
 
     //创建公私钥对
     private static void createKeyPair() throws Exception {
@@ -107,8 +134,20 @@ class RSAUtils {
 
     }
     public static void main(String[] args) throws Exception {
-        //设置公私钥对存放路径，可选，默认是工程目录
+
+        String publicKey = getPublicKey();
+        String privateKey = getPrivateKey();
+
+        System.out.println("公钥为:"+publicKey);
+        System.out.println("私钥为:"+privateKey);
+        String s = "五点行动";
+        String secret = RSAUtils.encryptWithRSA(s);
+        System.out.println("经过RSA加密后的密文为："+secret);
+        String original = RSAUtils.decryptWithRSA(secret);
+        System.out.println("经过RSA解密后的原文为："+original);
+    /*    //设置公私钥对存放路径，可选，默认是工程目录
         //RSAUtils.setKeyPath(str);
+        String publicKey ="";
         System.out.println("请输入明文：");
         Scanner sca = new Scanner(System.in);
         String str =sca.nextLine();
@@ -119,7 +158,7 @@ class RSAUtils {
         System.out.println("============================");
         String original = RSAUtils.decryptWithRSA(secret);
         System.out.println("经过RSA解密后的原文为：");
-        System.out.println(original);
+        System.out.println(original);*/
 
     }
 }
