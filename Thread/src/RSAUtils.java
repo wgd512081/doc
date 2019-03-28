@@ -140,7 +140,7 @@ class RSAUtils {
 
         System.out.println("公钥为:"+publicKey);
         System.out.println("私钥为:"+privateKey);
-        String s = "五点行动";
+        String s = "五点行动123ARASFssd";
         String secret = RSAUtils.encryptWithRSA(s);
         System.out.println("经过RSA加密后的密文为："+secret);
         String original = RSAUtils.decryptWithRSA(secret);

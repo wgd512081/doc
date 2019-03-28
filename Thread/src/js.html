@@ -1,0 +1,52 @@
+//1
+//映入js包
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://www-cs-students.stanford.edu/~tjw/jsbn/rsa2.js"></script>
+
+//2声明加密对象
+var RSADo = {
+"modulus":"",
+"publicExponent":""}
+//2获取加密信息
+function getModule(){
+mui.ajax("..../....", {
+data: {
+},
+dataType: 'json', //服务器返回json格式数据
+async: false,
+type: 'post', //HTTP请求类型
+timeout: 10000, //超时时间设置为10秒；
+success: function (data) {
+RSADo.modulus = data.modu;
+RSADo.publicExponent = data.g;
+privateKey = data.m;
+},
+error: function (xhr, type, errorThrown) {
+}
+});
+/* var str = "12345"
+var rsa = new RSAKey()
+rsa.setPublic(RSADo.modulus, RSADo.publicExponent)
+var encryptStr = rsa.encrypt(str);
+console.log('modulus：', RSADo.modulus);
+console.log('明文（explain）：', str)
+console.log('加密后（encrypt）：', encryptStr)
+// 解密
+rsa.setPrivate(RSADo.modulus, RSADo.publicExponent, privateKey)
+var decryptStr = rsa.decrypt(encryptStr)
+console.log('解密私钥：', privateKey)
+console.log('解密后（decrypt）', decryptStr)*/
+})
+
+//公钥加密方法
+function encryption(str){
+// 实例化js的RSA对象生成
+var rsa = new RSAKey()
+rsa.setPublic(RSADo.modulus, RSADo.publicExponent)
+var encryptStr = rsa.encrypt(str);
+return encryptStr;
+}
