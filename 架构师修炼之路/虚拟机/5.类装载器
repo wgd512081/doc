@@ -1,0 +1,71 @@
+**类装载器**
+    class装载验证流程
+        加载
+            装载类的第一个阶段
+            取得类的二进制流
+            转为方法区数据结构
+            在Java堆中生成对应的java.lang.Class对象
+        链接
+             验证
+                目的：保证Class流的格式是正确的
+                      文件格式的验证
+                         是否以0xCAFEBABE开头
+                         版本号是否合理
+                      元数据验证
+                        是否有父类
+                        继承了final类？
+                        非抽象类实现了所有的抽象方法
+                字节码验证 (很复杂)
+                        运行检查
+                        栈数据类型和操作码数据参数吻合
+                        跳转指令指定到合理的位置
+                符号引用验证
+                        常量池中描述类是否存在
+                        访问的方法或字段是否存在且有足够的权限
+             准备
+                分配内存，并为类设置初始值 （方法区中）
+                    public static int v=1;
+                    在准备阶段中，v会被设置为0
+                    在初始化的<clinit>中才会被设置为1
+                    对于static final类型，在准备阶段就会被赋上正确的值
+                    public static final  int v=1;
+             解析
+                符号引用替换为直接引用
+                     符号引用:类似于字符串引用对象不一定被加载
+                     直接引用:指针或者地址偏移量引用对象一定在内存
+        初始化
+            执行类构造器<clinit>
+                 static变量 赋值语句
+                 static{}语句
+            子类的<clinit>调用前保证父类的<clinit>被调用
+            <clinit>是线程安全的
+什么是类装载器ClassLoader
+    ClassLoader是一个抽象类
+    ClassLoader的实例将读入Java字节码将类装载到JVM中
+    ClassLoader可以定制，满足不同的字节码流获取方式
+    ClassLoader负责类装载过程中的加载阶段
+
+ClassLoader的重要方法
+public Class<?> loadClass(String name) throws ClassNotFoundException
+    载入并返回一个Class
+protected final Class<?> defineClass(byte[] b, int off, int len)
+    定义一个类，不公开调用
+protected Class<?> findClass(String name) throws ClassNotFoundException
+    loadClass回调该方法，自定义ClassLoader的推荐做法
+protected final Class<?> findLoadedClass(String name)
+    寻找已经加载的类
+
+BootStrap ClassLoader （启动ClassLoader）
+Extension ClassLoader （扩展ClassLoader）
+App ClassLoader （应用ClassLoader/系统ClassLoader）
+Custom ClassLoader(自定义ClassLoader)
+
+每个ClassLoader都有一个Parent作为父亲
+
+自下往上检查类是否被加载,自上向下尝试加载类
+
+Thread. setContextClassLoader()
+    上下文加载器
+    是一个角色
+    用以解决顶层ClassLoader无法访问底层ClassLoader的类的问题
+    基本思想是，在顶层ClassLoader中，传入底层ClassLoader的实例

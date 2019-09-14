@@ -1,0 +1,37 @@
+2.常用的jvm参数
+    Trace跟踪的参数
+        -verbose:gc
+        -XX:+printGC
+        -XX:+PrintGCDetails
+        -XX:PrintGCTimeStamps
+        -Xloggc:log/gc.log  指定日志位置,以文件输出
+        -XX:+PrintHeapAtGC  每一次GC后打印堆信息
+        -XX:+TranceClassLoading  监控类的加载
+        -XX:+PrintClassHistogram  按下Ctrl+Break后打印类信息
+    堆的分配参数
+        -Xmx -Xms 指定最大堆和最小堆
+        -Xmn 设置新生代的大小
+        -XX:NewRatio 按比例分配新生代的大小  4表示新生代:老年代=1:4
+        -XX:SurvoviRatio设置survivor区和eden区的比   8表示survivor:eden=2:8
+
+        -XX:+HeapDumpOnOutOfMemoryError  OOM时导出堆到文件
+        -XX:+HeapDumpPath   导出OOM的路径
+                 -Xmx20m -Xms5m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=d:/a.dump
+        -XX:OnOutOfMemoryError
+        在OOM时，执行一个脚本
+        "-XX:OnOutOfMemoryError=D:/tools/jdk1.7_40/bin/printstack.bat %p“
+        根据实际事情调整新生代和幸存代的大小
+        官方推荐新生代占堆的3/8
+        幸存代占新生代的1/10
+        在OOM时，记得Dump出堆，确保可以排查现场问题
+
+        -XX:PermSize  -XX:MaxPermSize
+             设置永久区的初始空间和最大空间
+             他们表示，一个系统可以容纳多少个类型
+
+        -Xss
+        通常只有几百K
+        决定了函数调用的深度
+        每个线程都有独立的栈空间
+        局部变量、参数 分配在栈上
+
